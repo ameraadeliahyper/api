@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 
 // Gunakan middleware CORS
 app.use(cors({
-    origin: 'https://img2video.kingai.online'
+    origin: 'https://img2video.kingai.online',
   }));
   
 // Inisialisasi client Replicate
