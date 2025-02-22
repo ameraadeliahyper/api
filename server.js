@@ -12,8 +12,8 @@ const port = process.env.PORT || 3000;
 
 // Gunakan middleware CORS
 app.use(cors({
-    origin: 'https://img2video.kingai.online',
-  }));
+    origin: 'https://img2video.kingai.online', // Ganti dengan domain frontend
+}));
   
 // Inisialisasi client Replicate
 const replicate = new Replicate({
@@ -48,15 +48,19 @@ fs.mkdir('uploads', { recursive: true });
 // Endpoint to generate video
 app.post('/api/generate-video', upload.single('image'), async (req, res) => {
   try {
-    const imagePath = path.join(__dirname, 'uploads', req.file.filename);
-    const imageBuffer = await fs.readFile(imagePath);
+      if (!req.file) {
+          return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const imagePath = path.join(__dirname, 'uploads', req.file.filename);
+      const imageBuffer = await fs.readFile(imagePath);
 
     const input = {
-      prompt: req.body.prompt,
-      duration: Number(req.body.duration),
+      prompt: req.body.prompt, // Ambil prompt dari request
+      duration: Number(req.body.duration), // Ambil duration dari request
       aspect_ratio: req.body.aspect_ratio, // Ambil aspect_ratio dari request
       negative_prompt: req.body.negative_prompt, // Ambil negative_prompt dari request
-      start_image: imageBuffer,
+      start_image: imageBuffer, // Ambil prompt dari request
     };
 
     console.log('Menjalankan model...');
@@ -78,9 +82,9 @@ app.post('/api/generate-video', upload.single('image'), async (req, res) => {
 
     res.json({ videoUrl: `/videos/${filename}` });
   } catch (error) {
-    console.error('Terjadi error:', error);
-    res.status(500).send('Error generating video');
-  }
+    console.error('Error occurred:', error);
+    res.status(500).json({ error: 'Error generating video' });
+}
 });
 
 // Serve static files from the 'videos' directory
