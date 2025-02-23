@@ -7,6 +7,8 @@ const path = require('path');
 const Replicate = require('replicate');
 require('dotenv').config();
 
+const protocol = window.location.protocol.includes('https') ? 'wss': 'ws'
+const ws = new WebSocket(`${protocol}://${location.host}/ws`);
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -15,15 +17,18 @@ const port = process.env.PORT || 5000;
 
 // Gunakan middleware CORS
 app.use(cors({
-  origin: 'https://img2video.kingai.online:5000', // Ganti dengan domain frontend Anda
+  origin: 'https://img2video.kingai.online', //  domain frontend Anda
   methods: ['GET', 'POST'], // Metode yang diizinkan
-  credentials: false // Jika Anda menggunakan cookie atau otentikasi
+  credentials: true // Jika Anda menggunakan cookie atau otentikasi
 }));
   
 // Inisialisasi client Replicate
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN,
 });
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Function to generate a random string
 function generateRandomString(length) {
@@ -70,6 +75,7 @@ app.post('/gen', upload.single('image'), async (req, res) => {
 
     console.log('Menjalankan model...');
     const output = await replicate.run('kwaivgi/kling-v1.6-pro', { input });
+    res.send('Request received');
 
     // Save the output video
     const randomString = generateRandomString(8);
@@ -96,5 +102,5 @@ app.post('/gen', upload.single('image'), async (req, res) => {
 app.use('/videos', express.static(path.join(__dirname, 'videos')));
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
