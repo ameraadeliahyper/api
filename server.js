@@ -7,8 +7,8 @@ const path = require('path');
 const Replicate = require('replicate');
 require('dotenv').config();
 
-const protocol = window.location.protocol.includes('https') ? 'wss': 'ws'
-const ws = new WebSocket(`${protocol}://${location.host}/ws`);
+// const protocol = window.location.protocol.includes('https') ? 'wss': 'ws'
+// const ws = new WebSocket(`${protocol}://${location.host}/ws`);
 
 const app = express();
 const port = process.env.PORT || 5000;
