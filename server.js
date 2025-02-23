@@ -48,7 +48,7 @@ const upload = multer({ storage: storage });
 fs.mkdir('uploads', { recursive: true });
 
 // Endpoint to generate video
-app.post('/api/generate-video', upload.single('image'), async (req, res) => {
+app.post('/gen', upload.single('image'), async (req, res) => {
   try {
       if (!req.file) {
           return res.status(400).json({ error: 'No file uploaded' });
