@@ -1,6 +1,6 @@
 // server.js
 const express = require('express');
-const cors = require('cors'); // Import cors
+// const cors = require('cors'); // Import cors
 const multer = require('multer');
 const fs = require('fs').promises;
 const path = require('path');
@@ -11,11 +11,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Gunakan middleware CORS
-app.use(cors({
-  origin: 'https://img2video.kingai.online', // Ganti dengan domain frontend Anda
-  methods: ['GET', 'POST'], // Metode yang diizinkan
-  credentials: false // Jika Anda menggunakan cookie atau otentikasi
-}));
+// app.use(cors({
+//   origin: 'https://img2video.kingai.online', // Ganti dengan domain frontend Anda
+//   methods: ['GET', 'POST'], // Metode yang diizinkan
+//   credentials: false // Jika Anda menggunakan cookie atau otentikasi
+// }));
   
 // Inisialisasi client Replicate
 const replicate = new Replicate({
