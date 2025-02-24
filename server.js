@@ -17,9 +17,9 @@ const port = process.env.PORT || 5000;
 
 // Gunakan middleware CORS
 app.use(cors({
-  origin: 'https://img2video.kingai.online/', //  domain frontend Anda
-  methods: ['GET', 'POST'], // Metode yang diizinkan
-  credentials: true // Jika Anda menggunakan cookie atau otentikasi
+  origin: 'https://img2video.kingai.online', // Ganti dengan domain frontend Anda
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
 }));
   
 // Inisialisasi client Replicate
