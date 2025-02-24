@@ -70,13 +70,28 @@ app.post('/gen', upload.single('image'), async (req, res) => {
       duration: Number(req.body.duration), // Ambil duration dari request
       aspect_ratio: req.body.aspect_ratio, // Ambil aspect_ratio dari request
       negative_prompt: req.body.negative_prompt, // Ambil negative_prompt dari request
-      start_image: imageBuffer, // Ambil prompt dari request
+      start_image: imageBuffer, // Ambil image dari request
     };
 
     console.log('Menjalankan model...');
     const output = await replicate.run('kwaivgi/kling-v1.6-pro', { input });
     res.send('Request received');
-
+    const MAX_RETRIES = 3;
+    let attempts = 0;
+    
+    while (attempts < MAX_RETRIES) {
+      try {
+        const output = await replicate.run('kwaivgi/kling-v1.6-pro', { input });
+        // Proses output
+        break; // Keluar dari loop jika berhasil
+      } catch (error) {
+        attempts++;
+        if (attempts === MAX_RETRIES) {
+          throw error; // Lempar error jika sudah mencapai batas
+        }
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Tunggu 2 detik sebelum mencoba lagi
+      }
+    }
     // Save the output video
     const randomString = generateRandomString(8);
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
